@@ -1,0 +1,149 @@
+# Multi-Agent Orchestration
+crewai==0.90.0
+langchain==0.3.7
+langchain-openai==0.2.9
+langchain-community==0.3.7
+langchain-experimental==0.3.3
+langgraph==0.2.45
+autogen==0.5.2
+ray[default]==2.39.0
+
+# ML Frameworks
+scikit-learn==1.5.2
+tensorflow==2.18.0
+torch==2.5.1
+xgboost==2.1.2
+lightgbm==4.5.0
+catboost==1.2.7
+
+# ML Model Deployment
+bentoml==1.3.16
+mlflow==2.18.0
+kserve==0.13.1
+
+# Data Processing
+pandas==2.2.3
+numpy==2.1.3
+polars==1.14.0
+pyarrow==18.1.0
+dask[complete]==2024.11.2
+
+# Data Orchestration
+apache-airflow==2.10.4
+apache-airflow-providers-amazon==8.30.0
+apache-airflow-providers-postgres==5.13.1
+prefect==3.1.9
+dagster==1.9.6
+temporal-sdk==1.8.0
+
+# Message Queues & Streaming
+kafka-python==2.0.2
+confluent-kafka==2.6.1
+celery==5.4.0
+redis==5.2.0
+rabbitmq==0.2.0
+
+# Databases
+psycopg2-binary==2.9.10
+sqlalchemy==2.0.36
+alembic==1.14.0
+pymongo==4.10.1
+cassandra-driver==3.29.2
+
+# Vector Databases
+weaviate-client==4.9.3
+pymilvus==2.4.9
+qdrant-client==1.12.1
+chromadb==0.5.23
+pgvector==0.3.6
+
+# API & Web
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+pydantic==2.9.2
+pydantic-settings==2.6.1
+httpx==0.27.2
+websockets==14.1
+graphene==3.4.3
+starlette==0.41.3
+
+# Authentication & Security
+keycloak==4.5.1
+pyjwt==2.9.0
+cryptography==43.0.3
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.17
+
+# Monitoring & Observability
+prometheus-client==0.21.0
+prometheus-fastapi-instrumentator==7.0.0
+opentelemetry-api==1.28.2
+opentelemetry-sdk==1.28.2
+opentelemetry-instrumentation-fastapi==0.49b2
+opentelemetry-exporter-jaeger==1.27.0
+py-grpc-prometheus==0.8.0
+
+# Logging
+structlog==24.4.0
+python-json-logger==3.2.1
+
+# Error Tracking
+sentry-sdk[fastapi]==2.18.0
+
+# Testing
+pytest==8.3.4
+pytest-asyncio==0.24.0
+pytest-cov==6.0.0
+pytest-mock==3.14.0
+httpx-mock==0.17.3
+faker==33.1.0
+factory-boy==3.3.1
+locust==2.32.4
+
+# Code Quality
+black==24.10.0
+flake8==7.1.1
+mypy==1.13.0
+pylint==3.3.2
+isort==5.13.2
+pre-commit==4.0.1
+bandit==1.8.0
+
+# Infrastructure
+kubernetes==31.0.0
+terraform-py==0.3.1
+ansible==11.1.0
+
+# Cloud SDKs
+boto3==1.35.72
+azure-mgmt-compute==33.0.0
+google-cloud-aiplatform==1.73.0
+
+# Utilities
+python-dotenv==1.0.1
+click==8.1.8
+rich==13.9.4
+tqdm==4.67.1
+pyyaml==6.0.2
+toml==0.10.2
+python-dateutil==2.9.0
+tzdata==2024.2
+requests==2.32.3
+
+# LLM APIs
+openai==1.54.5
+anthropic==0.39.0
+cohere==5.11.4
+
+# Document Processing
+pytesseract==0.3.13
+PDF2Text==1.3.0
+python-docx==1.1.2
+
+# Time Series
+prophet==1.1.6
+statsmodels==0.14.4
+
+# Graph Databases
+neo4j==5.26.0
