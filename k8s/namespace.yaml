@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ai-platform
+  labels:
+    name: ai-platform
+    environment: production

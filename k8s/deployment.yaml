@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-platform-app
+  namespace: ai-platform
+  labels:
+    app: ai-platform
+    component: backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ai-platform
+      component: backend
+  template:
+    metadata:
+      labels:
+        app: ai-platform
+        component: backend
+    spec:
+      containers:
+      - name: ai-platform
+        image: ai-platform:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+          name: http
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: ai-platform-secrets
+              key: DATABASE_URL
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: ai-platform-secrets
+              key: POSTGRES_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ai-platform-secrets
+              key: POSTGRES_PASSWORD
+        envFrom:
+        - configMapRef:
+            name: ai-platform-config
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-platform-service
+  namespace: ai-platform
+  labels:
+    app: ai-platform
+    component: backend
+spec:
+  type: ClusterIP
+  selector:
+    app: ai-platform
+    component: backend
+  ports:
+  - port: 80
+    targetPort: 8000
+    protocol: TCP
+    name: http
