@@ -128,31 +128,60 @@ Production-ready, enterprise-grade AI business automation platform built entirel
 - kubectl
 ```
 
-### Installation
+### Quick Start
+
+#### Option 1: Docker Compose (Recommended for Local)
 
 ```bash
 # Clone repository
 git clone https://github.com/Garrettc123/ai-business-platform.git
 cd ai-business-platform
 
-# Setup Python environment
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install -r requirements.txt
+# Quick deploy with script
+chmod +x deploy.sh
+./deploy.sh
 
-# Deploy infrastructure
-cd infrastructure/terraform
-terraform init && terraform apply
+# Or manually with docker-compose
+cp .env.example .env
+# Edit .env with your configuration
+docker-compose up -d
 
-# Install components with Helm
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install kafka bitnami/kafka
-helm install postgresql bitnami/postgresql
-helm install redis bitnami/redis
+# Check status
+docker-compose ps
+
+# View logs
+docker-compose logs -f
+```
+
+#### Option 2: Kubernetes Deployment
+
+```bash
+# Deploy to Kubernetes cluster
+kubectl apply -f k8s/
+
+# Check deployment status
+kubectl get all -n ai-platform
+
+# View logs
+kubectl logs -l app=ai-platform -n ai-platform -f
+```
+
+#### Option 3: Using Makefile
+
+```bash
+# Build and start services
+make build
+make up
+
+# View status and logs
+make ps
+make logs
 
 # Deploy to Kubernetes
-kubectl apply -f infrastructure/kubernetes/
+make k8s-deploy
 ```
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions and troubleshooting.
 
 ## 📊 Performance Metrics
 
