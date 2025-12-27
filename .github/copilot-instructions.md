@@ -60,7 +60,7 @@ Order imports using isort with Black-compatible settings:
 ```python
 import os
 import logging
-from typing import List, Dict, Any
+from typing import Any
 
 from fastapi import FastAPI, Depends
 from pydantic import BaseModel
