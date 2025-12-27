@@ -177,7 +177,7 @@ class ResearchAgent:
             role="Research Specialist",
             goal="Conduct thorough research and analysis",
             backstory="Expert researcher with access to multiple data sources",
-            tools=[self._get_tools()],
+            tools=self._get_tools(),
             verbose=True
         )
     
@@ -199,9 +199,11 @@ class ResearchAgent:
 
 ```python
 from sqlalchemy import Column, String, DateTime, Index, func
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import DeclarativeBase
 
-Base = declarative_base()
+class Base(DeclarativeBase):
+    """Base class for all database models"""
+    pass
 
 class Contribution(Base):
     """Database model for user contributions"""
