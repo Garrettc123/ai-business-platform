@@ -11,6 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 import uvicorn
 
+from app import __version__, __title__, __description__
 from app.core.config import settings
 from app.core.logging import setup_logging
 from app.api.v1 import api_router
@@ -32,9 +33,9 @@ async def lifespan(app: FastAPI):
 
 # Create FastAPI application
 app = FastAPI(
-    title="Tree of Life System",
-    description="Multiplex AI Business Platform - Integrated GitHub, Linear, Notion & AI ecosystem",
-    version="1.0.0",
+    title=__title__,
+    description=__description__,
+    version=__version__,
     docs_url="/docs",
     redoc_url="/redoc",
     lifespan=lifespan,
@@ -54,13 +55,16 @@ app.add_middleware(GZipMiddleware, minimum_size=1000)
 app.include_router(api_router, prefix=settings.API_PREFIX)
 
 
+from app import __version__, __title__, __description__
+
+
 @app.get("/")
 async def root():
     """Root endpoint"""
     return {
-        "name": "Tree of Life System",
-        "description": "Multiplex AI Business Platform",
-        "version": "1.0.0",
+        "name": __title__,
+        "description": __description__,
+        "version": __version__,
         "status": "operational",
         "architecture": {
             "roots": "Blockchain & Core Infrastructure",
@@ -79,7 +83,7 @@ async def health_check():
     return {
         "status": "healthy",
         "environment": settings.ENVIRONMENT,
-        "version": "1.0.0"
+        "version": __version__
     }
 
 

@@ -8,13 +8,13 @@ running as a separate Node.js service (github.com/Garrettc123/tree-of-life-syste
 import os
 import logging
 from typing import Optional, Dict, Any
-from threading import Lock
+import asyncio
 import httpx
 
 logger = logging.getLogger(__name__)
 
-# Thread-safe singleton lock
-_integration_lock = Lock()
+# Async lock for thread-safe singleton
+_integration_lock = asyncio.Lock()
 _integration: Optional['TreeOfLifeIntegration'] = None
 
 
@@ -109,24 +109,24 @@ class TreeOfLifeIntegration:
         await self.client.aclose()
 
 
-def get_integration() -> TreeOfLifeIntegration:
+async def get_integration() -> TreeOfLifeIntegration:
     """
-    Get or create global Tree of Life integration instance (thread-safe singleton)
+    Get or create global Tree of Life integration instance (async-safe singleton)
     """
     global _integration
     if _integration is None:
-        with _integration_lock:
-            # Double-check locking pattern
+        async with _integration_lock:
+            # Double-check locking pattern for async
             if _integration is None:
                 _integration = TreeOfLifeIntegration()
     return _integration
 
 
 async def close_integration():
-    """Close global Tree of Life integration"""
+    """Close global Tree of Life integration (async-safe)"""
     global _integration
     if _integration is not None:
-        with _integration_lock:
+        async with _integration_lock:
             if _integration is not None:
                 await _integration.close()
                 _integration = None
