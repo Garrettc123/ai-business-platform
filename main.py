@@ -55,9 +55,6 @@ app.add_middleware(GZipMiddleware, minimum_size=1000)
 app.include_router(api_router, prefix=settings.API_PREFIX)
 
 
-from app import __version__, __title__, __description__
-
-
 @app.get("/")
 async def root():
     """Root endpoint"""
