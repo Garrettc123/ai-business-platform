@@ -129,4 +129,4 @@ async def close_integration():
         with _integration_lock:
             if _integration is not None:
                 await _integration.close()
-                _integration = None
+        _integration = None
