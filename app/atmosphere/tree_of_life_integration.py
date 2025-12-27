@@ -8,9 +8,14 @@ running as a separate Node.js service (github.com/Garrettc123/tree-of-life-syste
 import os
 import logging
 from typing import Optional, Dict, Any
+from threading import Lock
 import httpx
 
 logger = logging.getLogger(__name__)
+
+# Thread-safe singleton lock
+_integration_lock = Lock()
+_integration: Optional['TreeOfLifeIntegration'] = None
 
 
 class TreeOfLifeIntegration:
@@ -28,7 +33,12 @@ class TreeOfLifeIntegration:
             "TREE_OF_LIFE_URL", 
             "http://localhost:3000"
         )
-        self.client = httpx.AsyncClient(base_url=self.base_url)
+        # Configure timeout to prevent hanging requests
+        timeout = httpx.Timeout(30.0, connect=5.0)
+        self.client = httpx.AsyncClient(
+            base_url=self.base_url,
+            timeout=timeout
+        )
     
     async def get_system_status(self) -> Dict[str, Any]:
         """Get Tree of Life System status"""
@@ -99,15 +109,16 @@ class TreeOfLifeIntegration:
         await self.client.aclose()
 
 
-# Global integration instance
-_integration: Optional[TreeOfLifeIntegration] = None
-
-
 def get_integration() -> TreeOfLifeIntegration:
-    """Get or create global Tree of Life integration instance"""
+    """
+    Get or create global Tree of Life integration instance (thread-safe singleton)
+    """
     global _integration
     if _integration is None:
-        _integration = TreeOfLifeIntegration()
+        with _integration_lock:
+            # Double-check locking pattern
+            if _integration is None:
+                _integration = TreeOfLifeIntegration()
     return _integration
 
 
@@ -115,5 +126,7 @@ async def close_integration():
     """Close global Tree of Life integration"""
     global _integration
     if _integration is not None:
-        await _integration.close()
-        _integration = None
+        with _integration_lock:
+            if _integration is not None:
+                await _integration.close()
+                _integration = None
