@@ -142,7 +142,7 @@ from app.atmosphere.tree_of_life_integration import get_integration
 import asyncio
 
 async def test():
-    integration = get_integration()
+    integration = await get_integration()
     status = await integration.get_system_status()
     print(status)
     await integration.close()
@@ -159,7 +159,7 @@ asyncio.run(test())
 from app.atmosphere.tree_of_life_integration import get_integration
 
 async def sync_with_github():
-    integration = get_integration()
+    integration = await get_integration()
     
     # Sync GitHub repository data
     result = await integration.sync_github_data("owner/repo")
@@ -184,7 +184,7 @@ router = APIRouter()
 
 @router.post("/sync/github")
 async def sync_github(repo: str):
-    integration = get_integration()
+    integration = await get_integration()
     return await integration.sync_github_data(repo)
 ```
 
