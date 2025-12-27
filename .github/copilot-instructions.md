@@ -198,26 +198,24 @@ class ResearchAgent:
 - Use Alembic for database migrations
 
 ```python
-from sqlalchemy import Column, String, DateTime, Index
+from sqlalchemy import Column, String, DateTime, Index, func
 from sqlalchemy.ext.declarative import declarative_base
-from datetime import datetime
 
 Base = declarative_base()
 
 class Contribution(Base):
     """Database model for user contributions"""
     __tablename__ = "contributions"
-    __table_args__ = {'schema': 'trunk'}
+    __table_args__ = (
+        Index('idx_contributions_user_created', 'user_id', 'created_at'),
+        {'schema': 'trunk'}
+    )
     
     id = Column(String, primary_key=True)
     user_id = Column(String, nullable=False, index=True)
     content = Column(String, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
-    __table_args__ = (
-        Index('idx_contributions_user_created', 'user_id', 'created_at'),
-    )
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
 ```
 
 ### Pydantic Schemas
