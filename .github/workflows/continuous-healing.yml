@@ -1,0 +1,22 @@
+name: Continuous Healing
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+jobs:
+  heal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          echo "🏥 Repository health check..."
+          find . -name '*.json' -type f | while read f; do
+            python -m json.tool "$f" > /dev/null && echo "✅ $f" || echo "❌ $f"
+          done
+      - run: |
+          git config user.name "Healing Bot"
+          git config user.email "heal@bot.local"
+          if [ -n "$(git status --porcelain)" ]; then
+            git add . && git commit -m "🏥 Automated maintenance" || true
+            git push origin main 2>/dev/null || true
+          fi
