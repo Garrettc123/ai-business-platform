@@ -21,13 +21,16 @@ class NervousSystemLayer:
             "confidence": 0.92
         }
     
-    async def run_risk_assessment(self, data: dict):
+    async def run_risk_assessment(self, data: dict, context: str = ""):
         """Run risk assessment AI"""
-        return {
+        result = {
             "risk_level": "low",
             "confidence": 0.88,
             "factors": []
         }
+        if context:
+            result["context"] = context
+        return result
     
     async def orchestrate_workflow(self, workflow_id: str):
         """Orchestrate complex workflow using AI"""
