@@ -1,7 +1,7 @@
 """API v1 router"""
 from fastapi import APIRouter, HTTPException
 from typing import Dict, Any
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 
 api_router = APIRouter()
 
@@ -31,8 +31,9 @@ class GitHubSyncRequest(BaseModel):
     """Model for GitHub sync request"""
     repo: str = Field(..., description="Repository in format 'owner/repo'")
     
-    @validator('repo')
-    def validate_repo_format(cls, v):
+    @field_validator('repo')
+    @classmethod
+    def validate_repo_format(cls, v: str) -> str:
         """Validate repository format"""
         if '/' not in v or v.count('/') != 1:
             raise ValueError('Repository must be in format "owner/repo"')

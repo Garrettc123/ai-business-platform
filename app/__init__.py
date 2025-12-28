@@ -135,10 +135,10 @@ async def health_check():
             }
         }
     except Exception as e:
-        logger.error(f"Health check failed: {e}")
+        logger.error(f"Health check failed: {e}", exc_info=True)
         return {
             "status": "unhealthy",
-            "error": str(e)
+            "message": "Service health check failed"
         }
 
 
