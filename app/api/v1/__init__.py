@@ -1,5 +1,5 @@
 """API v1 router"""
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from typing import Dict, Any
 from pydantic import BaseModel, Field, field_validator
 
@@ -100,7 +100,7 @@ async def roots_health():
 async def create_contribution(contribution: ContributionCreate):
     """Process a new contribution through the trunk layer"""
     layers = get_layers()
-    result = await layers['trunk'].process_contribution(contribution.dict())
+    result = await layers['trunk'].process_contribution(contribution.model_dump())
     return result
 
 
@@ -193,7 +193,10 @@ async def ai_verify_contribution(contribution_id: str):
 async def assess_risk(request: RiskAssessmentRequest):
     """Run AI risk assessment"""
     layers = get_layers()
-    result = await layers['nervous_system'].run_risk_assessment(request.data)
+    result = await layers['nervous_system'].run_risk_assessment(
+        request.data,
+        request.context
+    )
     return result
 
 
