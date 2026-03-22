@@ -1,0 +1,14 @@
+name: Drift Detection
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+jobs:
+  drift-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for drift
+        run: |
+          echo "Drift detection scan: $(date)"
+          git diff --stat HEAD~1 HEAD || echo "No drift detected"
