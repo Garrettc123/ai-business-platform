@@ -3,8 +3,6 @@ name: Self-Healing Failover Deployment with Auto-Fix
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
   workflow_dispatch:
     inputs:
       max_retries:
@@ -294,12 +292,15 @@ jobs:
       - name: Deploy to Vercel with retry
         id: deploy_vercel
         continue-on-error: true
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
+          if [ -z "$VERCEL_TOKEN" ]; then echo "⚠️ Secret not set, skipping"; exit 0; fi
           echo "🚀 Deploying to Vercel..."
           attempt=1
-          
+
           while [ $attempt -le $MAX_RETRIES ]; do
-            if npm install -g vercel && vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes 2>&1; then
+            if npm install -g vercel && vercel --prod --token=$VERCEL_TOKEN --yes 2>&1; then
               echo "✅ Vercel deployment successful"
               echo "vercel_success=true" >> $GITHUB_OUTPUT
               exit 0

@@ -1,7 +1,7 @@
 name: Continuous Healing
 on:
   schedule:
-    - cron: '0 * * * *'
+    - cron: '43 5 * * *'
   workflow_dispatch:
 jobs:
   heal:
